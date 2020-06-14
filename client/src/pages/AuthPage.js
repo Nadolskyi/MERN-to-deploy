@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useHttp } from '../hooks/http.hook';
 import { useMessage } from '../hooks/message.hook';
+import { AuthContext } from '../context/AuthContext';
 
 export const AuthPage = () => {
+  const auth = useContext(AuthContext)
   const message = useMessage();
   const { loading, error, request, clearError } = useHttp();
   const [form, setForm] = useState({
@@ -13,6 +15,10 @@ export const AuthPage = () => {
     message(error);
     clearError();
   }, [error, message, clearError])
+
+  useEffect(() => {
+    window.M.updateTextFields();
+  }, [])
 
   const changeHandler = event => {
     setForm({ ...form, [event.target.name]: event.target.value })
@@ -28,7 +34,7 @@ export const AuthPage = () => {
   const loginHandler = async () => {
     try {
       const data = await request('/api/auth/login', 'POST', { ...form });
-      message(data.message);
+      auth.login(data.token, data.userId)
     } catch (e) { }
   }
 
@@ -48,12 +54,11 @@ export const AuthPage = () => {
                 type="text"
                 name="email"
                 className="yellow-input"
+                value={form.email}
                 onChange={changeHandler}
               />
               <label htmlFor="email">Email</label>
             </div>
-
-
             <div className="input-field">
               <input
                 placeholder="Insert Password"
@@ -61,6 +66,7 @@ export const AuthPage = () => {
                 type="password"
                 name="password"
                 className="yellow-input"
+                value={form.password}
                 onChange={changeHandler}
               />
               <label htmlFor="email">Password</label>
