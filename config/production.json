@@ -2,5 +2,5 @@
     "port": 80,
     "jwtSecret": "Koziy",
     "mongoUri": "mongodb+srv://nadolskyi:123qaz123@cluster0-5uquy.mongodb.net/app?retryWrites=true&w=majority",
-    "baseUrl": "http://localhost:5000"
+    "baseUrl": "https://git.heroku.com/mern-to-deploy.git"
 }
